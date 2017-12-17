@@ -1,0 +1,5 @@
+Git
+
+git clone https://github.com/383514580/e-admin.git
+git config --global user.name "383514580"
+git config --global user.email ¡°383514580@qq.com¡±

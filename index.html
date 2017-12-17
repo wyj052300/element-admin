@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>后台界面</title>
+    <script src=""></script>
+    <link rel="stylesheet" href="style/index.css">
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+        body{
+            padding: 0;
+            margin: 0;
+        }
+        #app{
+            width:100%;
+            height: 100%;
+        }
+        .el-aside{
+            overflow: hidden;
+        }
+        .leftTitle{
+            font-size: 20px;
+            margin:20px auto;
+            text-align: center; 
+        }
+        .el-menu{
+            border: none;
+        }
+        .el-breadcrumb{
+            font-size: 15px;
+            margin-top:20px; 
+            float: left;
+            width: 90%;
+        }
+        .username{
+            font-weight: bold;
+            display: inline-block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: right;
+            width: 100%;
+        }
+        .el-dropdown{
+            float: right;
+            margin-top:15px;
+            right: 20px;
+        }
+        .img{
+            width:30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <el-container>
+            <el-aside width="200px" style="border-right:1px solid #E9EEF3;">
+                <el-row class="tac">
+                    <el-col>
+                      <h5 class="leftTitle"><i class="el-icon-share"></i>Atom System</h5>
+                      <el-menu
+                        default-active="2"
+                        class="el-menu-vertical-demo"
+                        @open="handleOpen"
+                        @close="handleClose">
+                        <el-submenu index="1">
+                          <template slot="title">
+                            <i class="el-icon-location"></i>
+                            <span>文章管理</span>
+                          </template>
+                          <el-menu-item-group>
+                            <template slot="title">分组一</template>
+                            <el-menu-item index="1-1">选项1</el-menu-item>
+                            <el-menu-item index="1-2">选项2</el-menu-item>
+                          </el-menu-item-group>
+                          <el-menu-item-group title="分组2">
+                            <el-menu-item index="1-3">选项3</el-menu-item>
+                          </el-menu-item-group>
+                          <el-submenu index="1-4">
+                            <template slot="title">选项4</template>
+                            <el-menu-item index="1-4-1">选项1</el-menu-item>
+                            <el-submenu index="1-4-2">
+                                <template slot="title">选项5</template>
+                                <el-menu-item index="1-4-2-1">选项1</el-menu-item>
+                            </el-submenu>
+                            
+                          </el-submenu>
+                        </el-submenu>
+                        <el-menu-item index="2">
+                          <i class="el-icon-menu"></i>
+                          <span slot="title">人员管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="3">
+                          <i class="el-icon-setting"></i>
+                          <span slot="title">设置</span>
+                        </el-menu-item>
+                      </el-menu>
+                    </el-col>
+                  </el-row>
+            </el-aside>
+            <el-container>
+                <el-header style="border-bottom:1px solid #E9EEF3;">
+                    <el-row :gutter="20">
+                        <el-col :span="20">
+                            <el-breadcrumb separator="/">
+                                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                                <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+                                <el-breadcrumb-item>列表</el-breadcrumb-item>
+                            </el-breadcrumb>
+                        </el-col>
+                        <el-col :span="1">
+                            <p class="username">
+                                wang
+                            </p>
+                        </el-col>
+                        <el-col :span="3">
+                            <el-dropdown trigger="click">   
+                                <img src="images/logo.png"  class="img el-icon-arrow-down" />
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item>查看</el-dropdown-item>
+                                    <el-dropdown-item>修改</el-dropdown-item>
+                                    <el-dropdown-item disabled>删除</el-dropdown-item>
+                                    <el-dropdown-item>退出</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </el-col>
+                    </el-row>
+                </el-header>
+                <el-main>
+                    主内容
+                </el-main>
+            </el-container>
+        </el-container>
+    </div>
+
+     <!-- 先引入 Vue -->
+     <script src="https://unpkg.com/vue/dist/vue.js"></script>
+     <!-- 引入组件库 -->
+     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+     <script>
+         new Vue({
+             el:"#app",
+             data:{
+                
+             },
+             methods: {
+                handleOpen(index,  indexPath) {
+                    console.log(index, indexPath);
+                },
+                handleClose(index, indexPath) {
+                    console.log(index, indexPath);
+                }
+            }
+           
+         });
+         
+     </script>
+ </body>
+ </html>
