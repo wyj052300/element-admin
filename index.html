@@ -38,20 +38,16 @@
         }
         .username{
             font-weight: bold;
-            display: inline-block;
             font-size: 18px;
             margin-bottom: 10px;
             text-align: right;
-            width: 100%;
         }
         .el-dropdown{
-            float: right;
             margin-top:15px;
-            right: 20px;
         }
         .img{
-            width:30px;
-            height: 30px;
+            width:35px;
+            height: 35px;
         }
     </style>
 </head>
@@ -112,12 +108,12 @@
                                 <el-breadcrumb-item>列表</el-breadcrumb-item>
                             </el-breadcrumb>
                         </el-col>
-                        <el-col :span="1">
+                        <el-col :span="2">
                             <p class="username">
                                 wang
                             </p>
                         </el-col>
-                        <el-col :span="3">
+                        <el-col :span="2">
                             <el-dropdown trigger="click">   
                                 <img src="images/logo.png"  class="img el-icon-arrow-down" />
                                 <el-dropdown-menu slot="dropdown">
