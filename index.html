@@ -85,7 +85,100 @@
                     </el-row>
                 </el-header>
                 <el-main>
-                    主内容
+                    <template>
+                        <el-table
+                          ref="multipleTable"
+                          :data="tableData"
+                          tooltip-effect="dark"
+                          style="width: 100%"
+                          stripe 
+                          :default-sort = "{prop: 'date', order: 'descending'}"
+                          v-loading="isLoading"
+                          >
+                          <el-table-column
+                            type="selection"
+                            width="55">
+                          </el-table-column>
+                          <el-table-column
+                            sortable
+                            prop="title"
+                            label="标题"
+                            width="300"
+                            show-overflow-tooltip>
+                          </el-table-column>
+                          <el-table-column
+                            sortable
+                            label="时间"
+                            width="150"
+                            show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <i class="el-icon-time"></i>
+                                <span style="margin-left: 5px">{{ scope.row.create_at }}</span>
+                            </template>
+                          </el-table-column>
+                          <el-table-column
+                            sortable
+                            prop="visit_count"
+                            label="访问量"
+                            width="120"
+                            show-overflow-tooltip>
+                          </el-table-column>
+                          <el-table-column
+                          sortable
+                          label="标签">
+                          <template slot-scope="scope">
+                            <el-tag type="success" v-if="scope.row.tab == 'ask'">
+                                {{ scope.row.tab }}
+                            </el-tag>
+                            <el-tag type="warning" v-else>
+                                    {{ scope.row.tab }}
+                                </el-tag>
+                        </template>
+                        </el-table-column>
+                        <el-table-column 
+                          label="操作"
+                          width="300">
+                            <template slot-scope="scope">
+                                <el-button>
+                                    <i class="el-icon-edit"></i>编辑
+                                </el-button>
+                                <el-button type="danger" @click="deleteRows(this)">
+                                    <i class="el-icon-delete"></i>删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+
+                        </el-table>
+                      </template>
+                      <el-pagination
+                        background
+                        layout="total, sizes, prev, pager, next, jumper"
+
+                        :current-page="activePage"
+                        @current-change="changeCurrent"
+
+                        :page-size="activePageSize"
+                        @size-change="changeSize"
+
+                        :page-sizes="pageSizes"
+                        :total="total">
+
+                      <!-- 
+                        layout="total, sizes, prev, pager, next, jumper"    //分页显示的样式，总页数，分页条数，上一页...
+
+                        :current-page="activePage"                    //获取当前页数（高亮）
+                        @current-change="activePage=$event"           //设置当前页数，点击别的页数，进行重新设置activePage变量
+                        @current-change="changeCurrent" //同上一行，自定义一个方法
+                        
+                        @size-change="activePageSize=$event"          //设置每页显示的条数
+                        @size-change="changeSize"   //同上一行，自定义一个方法
+                        :page-size="activePageSize"                   //获取每页显示的条数
+
+                        :total="total"                                //总页数
+
+                        :page-sizes="pageSizes"                       //可选择的设置每页选择几条
+                     -->
+                      </el-pagination>
                 </el-main>
             </el-container>
         </el-container>
@@ -95,18 +188,67 @@
      <script src="https://unpkg.com/vue/dist/vue.js"></script>
      <!-- 引入组件库 -->
      <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+     <!-- 引入axios文件，用来获取接口 -->
+     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
      <script>
          new Vue({
              el:"#app",
              data:{
-                
+                tableData: [],      //列表数据
+                isLoading:false,    //列表页加载时有加载状态（转圈）
+                activePage:1,       //当前页
+                total:100,          //总页数
+                activePageSize:5,   //默认每页数据条数
+                pageSizes:[5,10,15] //可选择的设置每页选择几条
+
              },
+             
              methods: {
-                handleOpen(index,  indexPath) {
+
+                getList:function(){ //获取列表内容
+                    this.isLoading = true;  //table进行有加载状态
+                    axios.get('https://cnodejs.org/api/v1/topics', {    //获取列表
+                        params: {
+                           page:this.activePage,
+                           limit:this.activePageSize
+                        }
+                    }).then(function (res) {//res为get获取数据后返回的资源
+                        this.isLoading = false; 
+                        this.tableData = res.data.data; //返回的数据放在res.data.data下
+                    }.bind(this));  //使用bind，由于then中的this是then中的this，不是vue的this
+                },
+
+                changeCurrent:function(page){   //获取当前页
+                    this.activePage = page;
+                },  
+                changeSize:function(size){      //获取每页显示的条数
+                    this.activePageSize = size;
+                },
+
+                deleteRows:function(obj){
+                    console.log(obj);
+                },
+
+
+                handleOpen(index,  indexPath) {//导航菜单触发open事件
                     console.log(index, indexPath);
                 },
-                handleClose(index, indexPath) {
+                handleClose(index, indexPath) {//导航菜单触发close事件
                     console.log(index, indexPath);
+                }
+            },
+
+            mounted:function(){    //生命周期，页面加载时，调用getList方法
+                this.getList()
+            },
+
+            watch:{//观察者
+                activePage:function(){//监测activePage变量，变化时要重新加载列表
+                    this.getList();
+                },
+
+                activePageSize:function(){//监测activePageSize变量，变化时要重新加载列表
+                    this.getList();
                 }
             }
            
