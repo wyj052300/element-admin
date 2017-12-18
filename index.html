@@ -112,13 +112,15 @@
                           <el-table-column
                             sortable
                             label="时间"
-                            width="150"
+                            width="250"
                             header-align="center"
                             align="center"
                             show-overflow-tooltip>
                             <template slot-scope="scope">
                                 <i class="el-icon-time"></i>
-                                <span style="margin-left: 5px">{{ scope.row.create_at }}</span>
+                                <span style="margin-left: 5px">
+                                    {{ new Date(scope.row.create_at).toLocaleString() }}
+                                </span>
                             </template>
                           </el-table-column>
                           <el-table-column
@@ -150,10 +152,11 @@
                           align="center"
                           width="300">
                             <template slot-scope="scope">
-                                <el-button>
+                                <el-button @click="editTitle(scope.$index)">
                                     <i class="el-icon-edit"></i>编辑
                                 </el-button>
-                                <el-button type="danger" @click="deleteRows(this)">
+                                <!-- 删除按钮，获取索引的方式：scope.$index -->
+                                <el-button type="danger" @click="deleteRows(scope.$index)">
                                     <i class="el-icon-delete"></i>删除
                                 </el-button>
                             </template>
@@ -163,6 +166,7 @@
                       </template>
                       <el-pagination
                         background
+                        align="center"
                         layout="total, sizes, prev, pager, next, jumper"
 
                         :current-page="activePage"
@@ -190,6 +194,18 @@
                         :page-sizes="pageSizes"                       //可选择的设置每页选择几条
                      -->
                       </el-pagination>
+
+                    <el-dialog title="修改标题" :visible.sync="isShowDialog">
+                        <el-form :model="form">
+                            <el-form-item label="标题" :label-width="formLabelWidth">
+                            <el-input v-model="dialog.title" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="isShowDialog = false">取 消</el-button>
+                            <el-button type="primary" @click="saveTitle">确 定</el-button>
+                        </div>
+                    </el-dialog>
                 </el-main>
             </el-container>
         </el-container>
@@ -210,8 +226,12 @@
                 activePage:1,       //当前页
                 total:100,          //总页数
                 activePageSize:5,   //默认每页数据条数
-                pageSizes:[5,10,15] //可选择的设置每页选择几条
-
+                pageSizes:[5,10,15],//可选择的设置每页选择几条
+                isShowDialog:false, //是否显示dialog对话框（编辑使用）
+                dialog:{
+                    index:'',
+                    title:'',
+                },
              },
              
              methods: {
@@ -236,8 +256,43 @@
                     this.activePageSize = size;
                 },
 
-                deleteRows:function(obj){
-                    console.log(obj);
+                deleteRows:function(index){//删除一行数据，index为tableData数组的索引
+                    //confirm提示框
+                    this.$confirm('是否删除', '删除', {
+                    confirmButtonText: '确定',    //确定按钮
+                    cancelButtonText: '取消',     //删除按钮
+                    type: 'warning'
+                    }).then(() => {
+                        //删除tableData数组中的对应数据
+                        this.tableData.splice(index,1);
+                        //消息提示框
+                        this.$message({
+                            type: 'success',    //消息类型
+                            message: '删除成功!' //提示
+                        });
+                    }).catch(() => {
+                        //删除提示
+                        this.$message({
+                            type: 'info',       //消息类型
+                            message: '已取消删除'//提示
+                        });          
+                    });
+                },
+  
+                editTitle:function(index){//编辑标题
+
+                    this.dialog.index = index;
+                    this.dialog.title = this.tableData[index].title;
+                    this.isShowDialog = true;
+                },
+                saveTitle:function(){//保存标题
+                    this.isShowDialog = false;
+                    this.tableData[this.dialog.index].title = this.dialog.title;
+                    this.$message({
+                        showClose: true,
+                        message: '修改成功',
+                        type: 'success'
+                    });
                 },
 
 

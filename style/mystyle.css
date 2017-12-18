@@ -38,3 +38,7 @@ body{
 .img{
     height: 35px;
 }
+
+.el-pagination{
+    margin-top:20px;
+}
