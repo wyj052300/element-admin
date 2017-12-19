@@ -240,8 +240,8 @@
                     this.isLoading = true;  //table进行有加载状态
                     axios.get('https://cnodejs.org/api/v1/topics', {    //获取列表
                         params: {
-                           page:this.activePage,
-                           limit:this.activePageSize
+                           page:this.activePage,        //当前页数
+                           limit:this.activePageSize    //每页的条数
                         }
                     }).then(function (res) {//res为get获取数据后返回的资源
                         this.isLoading = false; 
