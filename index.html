@@ -95,6 +95,7 @@
                           stripe 
                           :default-sort = "{prop: 'date', order: 'descending'}"
                           v-loading="isLoading"
+                          @selection-change="change"
                           >
                           <el-table-column
                             type="selection"
@@ -162,6 +163,7 @@
                         </el-table-column>
 
                         </el-table>
+                        
                       <el-pagination
                         background
                         align="center"
@@ -192,9 +194,9 @@
                         :page-sizes="pageSizes"                       //可选择的设置每页选择几条
                      -->
                       </el-pagination>
-
+                      <el-button type="danger" @click="deleteMore">多删</el-button>
                     <el-dialog title="修改标题" :visible.sync="isShowDialog">
-                        <el-form :model="form">
+                        <el-form :model="dialog">
                             <el-form-item label="标题">
                             <el-input v-model="dialog.title" auto-complete="off"></el-input>
                             </el-form-item>
@@ -230,6 +232,7 @@
                     index:'',
                     title:'',
                 },
+                del:[]
              },
              
              methods: {
@@ -293,6 +296,29 @@
                     });
                 },
 
+                change:function(value){
+                    // console.log(value);
+                    var arr = [];
+                    for(var i in value){
+                        arr.push(value[i].id);
+                    }
+                    this.del = arr;
+                }, 
+                deleteMore:function(){
+                    for(var i in this.del){
+                        for(var j in this.tableData){
+                            if(this.del[i] == this.tableData[j].id){
+                                this.tableData.splice(j,1);
+                                break;
+                            }
+                        }
+                    }
+                },
+
+                selectRow:function(row,selected){
+                    console.log(row);
+                    console.log(selected);
+                },
 
                 handleOpen(index,  indexPath) {//导航菜单触发open事件
                     console.log(index, indexPath);
