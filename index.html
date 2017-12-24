@@ -87,7 +87,6 @@
                     </el-row>
                 </el-header>
                 <el-main>
-                    <template>
                         <el-table
                           ref="multipleTable"
                           :data="tableData"
@@ -163,7 +162,6 @@
                         </el-table-column>
 
                         </el-table>
-                      </template>
                       <el-pagination
                         background
                         align="center"
@@ -197,7 +195,7 @@
 
                     <el-dialog title="修改标题" :visible.sync="isShowDialog">
                         <el-form :model="form">
-                            <el-form-item label="标题" :label-width="formLabelWidth">
+                            <el-form-item label="标题">
                             <el-input v-model="dialog.title" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-form>

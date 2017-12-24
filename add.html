@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>添加页面</title>
+    <!-- 自定义的颜色 -->
+    <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/mystyle.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+        <el-container>
+            <el-aside width="200px" style="border-right:1px solid #E9EEF3;">
+                <el-row class="tac">
+                    <el-col>
+                      <h5 class="leftTitle"><i class="el-icon-share"></i>Atom System</h5>
+                      <el-menu
+                        default-active="2"
+                        class="el-menu-vertical-demo">
+                        <el-submenu index="1">
+                          <template slot="title">
+                            <i class="el-icon-location"></i>
+                            <span>文章管理</span>
+                          </template>
+                          <el-menu-item-group>
+                            <template slot="title">分组一</template>
+                            <el-menu-item index="1-1">选项1</el-menu-item>
+                            <el-menu-item index="1-2">选项2</el-menu-item>
+                          </el-menu-item-group>
+                          <el-menu-item-group title="分组2">
+                            <el-menu-item index="1-3">选项3</el-menu-item>
+                          </el-menu-item-group>
+                          <el-submenu index="1-4">
+                            <template slot="title">选项4</template>
+                            <el-menu-item index="1-4-1">选项1</el-menu-item>
+                            <el-submenu index="1-4-2">
+                                <template slot="title">选项5</template>
+                                <el-menu-item index="1-4-2-1">选项1</el-menu-item>
+                            </el-submenu>
+                            
+                          </el-submenu>
+                        </el-submenu>
+                        <el-menu-item index="2">
+                          <i class="el-icon-menu"></i>
+                          <span slot="title">人员管理</span>
+                        </el-menu-item>
+                        <el-menu-item index="3">
+                          <i class="el-icon-setting"></i>
+                          <span slot="title">设置</span>
+                        </el-menu-item>
+                      </el-menu>
+                    </el-col>
+                  </el-row>
+            </el-aside>
+            <el-container>
+                <el-header style="border-bottom:1px solid #E9EEF3;">
+                    <el-row :gutter="20">
+                        <el-col :span="20">
+                            <el-breadcrumb separator="/">
+                                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                                <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+                                <el-breadcrumb-item>列表</el-breadcrumb-item>
+                            </el-breadcrumb>
+                        </el-col>
+                        <el-col :span="2">
+                            <p class="username">
+                                wang
+                            </p>
+                        </el-col>
+                        <el-col :span="2">
+                            <el-dropdown trigger="click">   
+                                <img src="images/logo.png"  class="img el-icon-arrow-down" />
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item>查看</el-dropdown-item>
+                                    <el-dropdown-item>修改</el-dropdown-item>
+                                    <el-dropdown-item disabled>删除</el-dropdown-item>
+                                    <el-dropdown-item>退出</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </el-col>
+                    </el-row>
+                </el-header>
+                <el-main>
+                    <el-form ref="form" :model="form" label-width="80px" :rules="rules" v-loading="isLoading">
+                        <el-form-item label="文章标题" prop="title">
+                            <el-input v-model="form.title" placeholder="请填写文章标题"></el-input>
+                        </el-form-item>
+                        <el-form-item label="文章类型">
+                            <el-select v-model="form.type" placeholder="请选择">
+                                <el-option label="提问" value="ask"></el-option>
+                                <el-option label="分享" value="share"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="时间">
+                            <el-date-picker v-model="form.date" type="date" placeholder="选择日期"></el-date-picker>
+                            <el-time-select v-model="form.time" placeholder="选择时间">
+                          </el-time-select>
+                        </el-form-item>
+                        <el-form-item label="是否免费">
+                            <el-switch v-model="form.isFree" active-color="#13ce66" inactive-color="#B4BCCC"></el-switch>
+                        </el-form-item>
+                        <el-form-item label="文章标签">
+                            <el-checkbox-group v-model="form.tag">
+                                <el-checkbox label="0">美食</el-checkbox>
+                                <el-checkbox label="1">学习</el-checkbox>
+                                <el-checkbox label="2">娱乐</el-checkbox>
+                                <el-checkbox label="禁用" disabled></el-checkbox>
+                                <el-checkbox label="选中且禁用" disabled></el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                        <el-form-item label="来源">
+                            <el-radio v-model="form.source" label="1">原创</el-radio>
+                            <el-radio v-model="form.source" label="2">网络</el-radio>
+                        </el-form-item>
+                        <el-form-item label="备注">
+                            <el-input type="textarea" :rows="2" placeholder="请输入备注内容" v-model="form.remark"></el-input>
+                        </el-form-item>
+                        <el-form-item label="">
+                                <el-button type="success" @click="onSubmit">添加</el-button>
+                                <el-button>取消</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-main>
+            </el-container>
+        </el-container>
+    </div>
+
+    <!-- 先引入 Vue -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入axios文件，用来获取接口 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                isLoading:false,
+                form:{
+                    title:'',
+                    type:'',
+                    date:'',
+                    time:'',
+                    isFree:false,
+                    tag:[],
+                    source:'',
+                    remark:'',
+                },
+                rules:{
+                    title:[
+                        { required: true, message: '文章标题不能为空', trigger: 'blur' },
+                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    ]
+                }
+            },
+            methods:{
+                onSubmit:function(){
+                    this.isLoading = true;
+                    setTimeout(function(){
+                        this.isLoading = false;
+                        this.$message({
+                            message:'添加成功',
+                            type:'success'
+                        });
+                    }.bind(this),1000);
+                }
+            }
+        });
+    
+    </script>
+</body>
+</html>
